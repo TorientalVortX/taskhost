@@ -14,7 +14,6 @@ function App() {
   const [selectedTask, setSelectedTask] = useState<any>(null); // For modal
   const [category, setCategory] = useState("To Do"); // Default category
   const [theme, setTheme] = useState<"dark" | "light">("dark"); // Theme state
-  const [shareUrl] = useState(window.location.href);
 
   // Categories for tasks (Trello-like)
   const categories = ["To Do", "In Progress", "Done"];
