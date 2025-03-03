@@ -1,0 +1,277 @@
+/* Custom themes using :root for Tailwind v4, inspired by Trello’s dark/light modes */
+:root {
+  --color-primary: #60a5fa; /* Light sky blue (consistent accent, more readable) */
+  --color-secondary: #4ade80; /* Bright lime green (consistent secondary) */
+  --color-danger: #f87171; /* Soft red for danger (e.g., delete buttons) */
+  --color-muted: #7f8c8d; /* Muted gray for secondary text/borders */
+  --color-text: #17202a; /* Dark text for light mode */
+  --color-background: #f5f7fa; /* Light gray background */
+  --color-card: #ffffff; /* White for cards */
+  --color-card-dark: #1e1e1e; /* Dark gray for cards in dark mode */
+}
+
+.dark-theme {
+  --color-text: #ffffff; /* White text for dark mode */
+  --color-background: #121212; /* Dark background */
+  --color-card: var(--color-card-dark); /* Dark gray for cards */
+  --color-muted: #4a5568; /* Slightly lighter muted gray for dark mode */
+}
+
+/* Ensure body styles */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  margin: 0;
+  font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: all 0.3s ease; /* Smooth theme transition */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align to top for better spacing */
+  min-height: 100vh;
+  padding: 20px 0; /* Add padding for breathing room */
+}
+
+/* App container (main layout) */
+.app {
+  background-color: var(--color-card);
+  color: var(--color-text);
+  width: 90%;
+  max-width: 1200px;
+  padding: 24px; /* More breathing room */
+  border-radius: 12px; /* Slightly larger radius for modern look */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Softer, more subtle shadow */
+  margin: 20px auto; /* Center align with auto margins */
+}
+
+/* Section styling (Add Task, Task List) */
+.app .section {
+  margin-bottom: 24px; /* Increased spacing between sections */
+  padding: 16px; /* Slightly reduced padding for balance */
+  background-color: var(--color-background);
+  border-radius: 8px; /* Smaller radius for consistency */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Lighter shadow */
+  border: 1px solid var(--color-muted); /* Thinner border for subtlety */
+}
+
+/* Section headers (e.g., Add a Task, To Do, In Progress, Done) */
+.app .section h2 {
+  margin-bottom: 16px; /* More space below headers */
+  color: var(--color-primary);
+  font-size: 1.25rem; /* Larger, more readable font */
+  font-weight: 600; /* Bolder for emphasis */
+  border-bottom: 2px solid var(--color-primary);
+  padding-bottom: 8px;
+}
+
+/* Form elements (input, select, button) */
+.app input,
+.app select,
+.app button {
+  background-color: var(--color-card);
+  color: var(--color-text);
+  border: 1px solid var(--color-muted);
+  border-radius: 6px; /* Smaller, sleeker radius */
+  padding: 10px 12px; /* Consistent padding */
+  font-size: 0.875rem; /* Readable but not overwhelming */
+  transition: all 0.3s ease; /* Smooth transitions */
+  margin-right: 8px; /* Space between form elements */
+}
+
+.app input:focus,
+.app select:focus,
+.app button:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3); /* Subtle focus glow */
+}
+
+.app button {
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight lift effect */
+}
+
+.app button:hover {
+  background-color: var(--color-secondary);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* More pronounced hover */
+}
+
+.app button:active {
+  transform: translateY(2px); /* Subtle press effect */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Task list and items (Trello-like columns) */
+.app .task-list {
+  background-color: var(--color-card);
+  padding: 12px; /* Slightly more padding */
+  border-radius: 8px; /* Consistent radius */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Lighter shadow */
+  border: 1px solid var(--color-muted);
+  margin-bottom: 16px; /* Space between columns */
+}
+
+.app .task-item {
+  background-color: var(--color-background);
+  padding: 12px; /* Consistent padding */
+  border-radius: 6px; /* Smaller radius for cards */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); /* Very subtle shadow */
+  border: 1px solid var(--color-muted);
+  margin-bottom: 12px; /* Space between tasks */
+  display: flex; /* Use flex for better alignment */
+  justify-content: space-between; /* Space buttons to the right */
+  align-items: center; /* Vertically center content */
+  transition: all 0.3s ease; /* Smooth transitions for hover */
+}
+
+.app .task-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Lift effect on hover */
+  transform: translateY(-2px); /* Slight lift */
+}
+
+/* Task text and completion checkbox */
+.app .task-item span {
+  flex: 1; /* Allow text to expand */
+  cursor: pointer;
+  font-size: 0.875rem; /* Consistent font size */
+}
+
+
+.app .task-item .line-through {
+  color: var(--color-muted);
+  text-decoration: line-through;
+}
+
+/* Buttons in task items (Edit, Delete, Details) */
+.app .task-item button {
+  padding: 6px 12px; /* Smaller, compact buttons */
+  font-size: 0.75rem; /* Smaller text for buttons */
+  margin-left: 8px; /* Space between buttons */
+}
+
+.app .task-item .bg-primary {
+  background-color: var(--color-primary);
+}
+
+.app .task-item .bg-red-500 {
+  background-color: var(--color-danger);
+}
+
+.app .task-item button:hover {
+  background-color: var(--color-secondary); /* Consistent hover for all buttons */
+}
+
+.app .task-item .bg-red-500:hover {
+  background-color: #dc2626; /* Darker red for delete hover */
+}
+
+/* Responsive design (Trello-like layout adjustments) */
+@media (max-width: 768px) {
+  .app {
+    width: 100%;
+    padding: 16px;
+    margin: 10px;
+  }
+
+  .app .section {
+    padding: 12px;
+  }
+
+  .app .task-list {
+    margin-bottom: 12px;
+  }
+
+  /* Stack columns vertically on mobile */
+  .app .grid-cols-3 {
+    grid-template-columns: 1fr; /* One column on mobile */
+    gap: 12px;
+  }
+
+  .app input,
+  .app select,
+  .app button {
+    width: 100%;
+    margin-bottom: 8px;
+    margin-right: 0; /* Remove right margin on mobile */
+  }
+}
+
+/* Category badges (Trello-like labels) */
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.category-todo { background-color: rgba(96, 165, 250, 0.2); color: var(--color-primary); }
+.category-in-progress { background-color: rgba(74, 222, 128, 0.2); color: var(--color-secondary); }
+.category-done { background-color: rgba(156, 163, 175, 0.2); color: var(--color-muted); }
+
+/* Modal styles (Trello-like popups) */
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(18, 18, 18, 0.8); /* Dark overlay for dark mode */
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-content {
+  background-color: var(--color-card);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  max-width: 28rem;
+  width: 100%;
+  transform: translateY(0);
+  transition: all 0.3s ease;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  background-color: var(--color-muted);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-secondary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus styles for accessibility */
+input:focus, button:focus, select:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Style code blocks (optional, for consistency) */
+code {
+  font-family: "Source Code Pro", Menlo, Monaco, Consolas, "Courier New", monospace;
+  background-color: #4b5563;
+  padding: 0.25em 0.5em;
+  border-radius: 0.375rem;
+  color: var(--color-text);
+}
+
