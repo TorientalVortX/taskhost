@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { collection, query, orderBy, onSnapshot, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { db } from "./firebase";
-import SortableItem, { Task, SortableItemProps } from "./SortableItem"; // Import Task and SortableItemProps
+import SortableItem, { Task } from "./SortableItem"; // Import Task and SortableItemProps
 import Modal from "react-modal";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
