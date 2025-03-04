@@ -141,7 +141,6 @@ body {
   font-size: 0.875rem; /* Consistent font size */
 }
 
-
 .app .task-item .line-through {
   color: var(--color-muted);
   text-decoration: line-through;
@@ -170,34 +169,114 @@ body {
   background-color: #dc2626; /* Darker red for delete hover */
 }
 
-/* Responsive design (Trello-like layout adjustments) */
+/* Enhanced Responsive Design */
 @media (max-width: 768px) {
+  /* App container adjustments */
   .app {
-    width: 100%;
-    padding: 16px;
-    margin: 10px;
+    width: 95%; /* Slightly wider on mobile */
+    padding: 16px; /* Reduced padding */
+    margin: 10px auto; /* Tighter margins */
+    border-radius: 8px; /* Slightly smaller radius */
   }
 
+  /* Body padding adjustment */
+  body {
+    padding: 10px 0; /* Less vertical padding on mobile */
+  }
+
+  /* Section adjustments */
   .app .section {
     padding: 12px;
+    margin-bottom: 16px; /* Reduced spacing */
   }
 
-  .app .task-list {
+  .app .section h2 {
+    font-size: 1.125rem; /* Slightly smaller headers */
     margin-bottom: 12px;
   }
 
-  /* Stack columns vertically on mobile */
+  /* Form elements stacked vertically */
+  .app input,
+  .app select,
+  .app button {
+    width: 100%; /* Full width */
+    margin-right: 0; /* Remove horizontal spacing */
+    margin-bottom: 8px; /* Vertical spacing */
+    padding: 8px 10px; /* Slightly smaller padding */
+  }
+
+  /* Task list and items */
+  .app .task-list {
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+
+  .app .task-item {
+    flex-direction: column; /* Stack content vertically */
+    align-items: flex-start; /* Align to left */
+    padding: 10px;
+  }
+
+  .app .task-item span {
+    margin-bottom: 8px; /* Space between text and buttons */
+  }
+
+  .app .task-item button {
+    width: 100%; /* Full-width buttons */
+    margin-left: 0; /* Remove left margin */
+    margin-bottom: 6px; /* Space between stacked buttons */
+    padding: 8px; /* Consistent padding */
+  }
+
+  /* Stack columns vertically (assuming grid layout) */
   .app .grid-cols-3 {
-    grid-template-columns: 1fr; /* One column on mobile */
+    grid-template-columns: 1fr; /* Single column */
     gap: 12px;
+  }
+
+  /* Modal adjustments */
+  .modal-content {
+    max-width: 90%; /* Constrain width on mobile */
+    padding: 1rem;
+  }
+
+  /* Theme toggle button */
+  .theme-toggle {
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Smaller screens (below 480px) */
+@media (max-width: 480px) {
+  .app {
+    width: 100%;
+    padding: 12px;
+    margin: 5px auto;
+  }
+
+  .app .section h2 {
+    font-size: 1rem;
   }
 
   .app input,
   .app select,
   .app button {
-    width: 100%;
-    margin-bottom: 8px;
-    margin-right: 0; /* Remove right margin on mobile */
+    font-size: 0.8125rem; /* Slightly smaller text */
+  }
+
+  .app .task-item span {
+    font-size: 0.8125rem;
+  }
+
+  .app .task-item button {
+    font-size: 0.6875rem; /* Smaller buttons */
+  }
+
+  .modal-content {
+    padding: 0.75rem;
   }
 }
 
@@ -274,4 +353,3 @@ code {
   border-radius: 0.375rem;
   color: var(--color-text);
 }
-
