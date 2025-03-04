@@ -1,21 +1,13 @@
+// App.tsx
 import React, { useState, useEffect } from "react";
 import { collection, query, orderBy, onSnapshot, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { db } from "./firebase";
-import SortableItem from "./SortableItem";
+import SortableItem, { Task, SortableItemProps } from "./SortableItem"; // Import Task and SortableItemProps
 import Modal from "react-modal";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 
 Modal.setAppElement("#root");
-
-interface Task {
-  id: string;
-  title: string;
-  completed: boolean;
-  category: string;
-  order: number;
-  createdAt: Date;
-}
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
