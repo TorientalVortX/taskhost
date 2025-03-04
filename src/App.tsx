@@ -26,7 +26,7 @@ function App() {
         const taskData = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        })) as any[]; // Ensure type compatibility
+        })) as any[];
         setTasks(taskData);
       });
       return () => unsubscribe();
@@ -113,11 +113,11 @@ function App() {
       </button>
       <div className="section">
         <h2>Add a Task</h2>
-        <form onSubmit={handleAddTask}>
+        <form onSubmit={handleAddTask} className="flex flex-col md:flex-row gap-2 md:gap-4">
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="p-4 border border-[var(--color-muted)] rounded-xl bg-[var(--color-card)] text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all duration-200"
+            className="p-2 border border-[var(--color-muted)] rounded-lg bg-[var(--color-card)] text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all duration-200"
           >
             {categories.map((cat) => (
               <option key={cat} value={cat}>
@@ -130,11 +130,11 @@ function App() {
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
             placeholder="Add a task..."
-            className="flex-1 p-4 border border-[var(--color-muted)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all duration-200 bg-[var(--color-card)] text-[var(--color-text)] placeholder-[var(--color-muted)]"
+            className="flex-1 p-2 border border-[var(--color-muted)] rounded-lg bg-[var(--color-card)] text-[var(--color-text)] placeholder-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all duration-200"
           />
           <button
             type="submit"
-            className="bg-[var(--color-primary)] text-[var(--color-text)] px-6 py-3 rounded-xl hover:bg-[var(--color-secondary)] transition-all duration-200 transform hover:scale-105 active:scale-95"
+            className="bg-[var(--color-primary)] text-[var(--color-text)] px-4 py-2 rounded-lg hover:bg-[var(--color-secondary)] transition-all duration-200 transform hover:scale-105 active:scale-95"
           >
             Add
           </button>
@@ -147,11 +147,11 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {categories.map((cat) => (
               <div key={cat} className="task-list">
-                <h2 className="text-xl font-semibold text-[var(--color-primary)] mb-4">
+                <h2 className="text-lg md:text-xl font-semibold text-[var(--color-primary)] mb-4">
                   {cat}
                 </h2>
                 <SortableContext
-                  items={tasks.filter((task) => task.category === cat)}
+                  items={tasks.filter((task) => task.category === cat).map((task) => task.id)}
                   strategy={verticalListSortingStrategy}
                 >
                   {tasks
@@ -159,6 +159,7 @@ function App() {
                     .map((task) => (
                       <SortableItem
                         key={task.id}
+                        id={task.id} // Pass `id` explicitly for SortableContext
                         task={task}
                         toggleTask={toggleTask}
                         deleteTask={deleteTask}
@@ -171,61 +172,54 @@ function App() {
           </div>
         </DndContext>
         <Modal
-  isOpen={!!selectedTask}
-  onRequestClose={closeModal}
-  style={{
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      backgroundColor: theme === 'dark' ? '#333' : '#fff',
-      color: theme === 'dark' ? '#fff' : '#000',
-    },
-  }}
->
-  {selectedTask && (
-    <div>
-      <h2>Edit Task</h2>
-      <input
-        type="text"
-        value={selectedTask.title}
-        onChange={(e) => setSelectedTask({ ...selectedTask, title: e.target.value })}
-        className="p-2 border rounded w-full mb-4"
-      />
-      <select
-        value={selectedTask.category}
-        onChange={(e) => setSelectedTask({ ...selectedTask, category: e.target.value })}
-        className="p-2 border rounded w-full mb-4"
-      >
-        {categories.map((cat) => (
-          <option key={cat} value={cat}>{cat}</option>
-        ))}
-      </select>
-      <button
-        onClick={async () => {
-          const taskRef = doc(db, "tasks", selectedTask.id);
-          await updateDoc(taskRef, {
-            title: selectedTask.title,
-            category: selectedTask.category,
-          });
-          closeModal();
-        }}
-        className="bg-[var(--color-primary)] text-[var(--color-text)] px-4 py-2 rounded hover:bg-[var(--color-secondary)]"
-      >
-        Save
-      </button>
-      <button
-        onClick={closeModal}
-        className="bg-gray-500 text-white px-4 py-2 rounded ml-2 hover:bg-gray-700"
-      >
-        Cancel
-      </button>
-    </div>
-  )}
-</Modal>
+          isOpen={!!selectedTask}
+          onRequestClose={closeModal}
+          className="modal-content"
+          overlayClassName="modal"
+          contentLabel="Edit Task Modal"
+        >
+          {selectedTask && (
+            <div className="flex flex-col gap-4">
+              <h2 className="text-xl font-semibold text-[var(--color-primary)]">Edit Task</h2>
+              <input
+                type="text"
+                value={selectedTask.title}
+                onChange={(e) => setSelectedTask({ ...selectedTask, title: e.target.value })}
+                className="p-2 border border-[var(--color-muted)] rounded-lg w-full bg-[var(--color-card)] text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all duration-200"
+              />
+              <select
+                value={selectedTask.category}
+                onChange={(e) => setSelectedTask({ ...selectedTask, category: e.target.value })}
+                className="p-2 border border-[var(--color-muted)] rounded-lg w-full bg-[var(--color-card)] text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] transition-all duration-200"
+              >
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+              <div className="flex gap-2">
+                <button
+                  onClick={async () => {
+                    const taskRef = doc(db, "tasks", selectedTask.id);
+                    await updateDoc(taskRef, {
+                      title: selectedTask.title,
+                      category: selectedTask.category,
+                    });
+                    closeModal();
+                  }}
+                  className="bg-[var(--color-primary)] text-[var(--color-text)] px-4 py-2 rounded-lg hover:bg-[var(--color-secondary)] transition-all duration-200"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={closeModal}
+                  className="bg-[var(--color-muted)] text-[var(--color-text)] px-4 py-2 rounded-lg hover:bg-gray-700 transition-all duration-200"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+        </Modal>
       </div>
     </div>
   );
