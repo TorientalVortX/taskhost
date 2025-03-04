@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { collection, query, orderBy, onSnapshot, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
-import { db } from "./firebase"; // Ensure you have the correct path to your firebase config
+import { db } from "./firebase";
 import SortableItem from "./SortableItem";
 import Modal from "react-modal";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
@@ -8,17 +8,24 @@ import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, us
 
 Modal.setAppElement("#root");
 
-function App() {
-  const [tasks, setTasks] = useState<any[]>([]);
-  const [newTask, setNewTask] = useState("");
-  const [selectedTask, setSelectedTask] = useState<any>(null); // For modal
-  const [category, setCategory] = useState("To Do"); // Default category
-  const [theme, setTheme] = useState<"dark" | "light">("dark"); // Theme state
+interface Task {
+  id: string;
+  title: string;
+  completed: boolean;
+  category: string;
+  order: number;
+  createdAt: Date;
+}
 
-  // Categories for tasks (Trello-like)
+function App() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [newTask, setNewTask] = useState("");
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [category, setCategory] = useState("To Do");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
   const categories = ["To Do", "In Progress", "Done"];
 
-  // Fetch tasks in real-time, grouped by category and sorted by order
   useEffect(() => {
     const fetchTasks = async () => {
       const tasksQuery = query(collection(db, "tasks"), orderBy("order", "asc"));
@@ -26,7 +33,7 @@ function App() {
         const taskData = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        })) as any[];
+        })) as Task[];
         setTasks(taskData);
       });
       return () => unsubscribe();
@@ -34,7 +41,6 @@ function App() {
     fetchTasks();
   }, []);
 
-  // Add a task
   const handleAddTask = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTask.trim()) return;
@@ -43,18 +49,16 @@ function App() {
       completed: false,
       createdAt: new Date(),
       category,
-      order: tasks.length, // Simple ordering; adjust as needed
+      order: tasks.length,
     });
     setNewTask("");
   };
 
-  // Toggle task completion
   const toggleTask = async (id: string, completed: boolean) => {
     const taskRef = doc(db, "tasks", id);
     await updateDoc(taskRef, { completed: !completed });
   };
 
-  // Delete a task
   const deleteTask = async (id: string) => {
     console.log('Deleting task with id:', id);
     const taskRef = doc(db, "tasks", id);
@@ -62,7 +66,6 @@ function App() {
     console.log('Task deleted');
   };
 
-  // Handle drag-and-drop (reorder tasks within columns)
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -73,7 +76,6 @@ function App() {
     const newTasks = arrayMove(tasks, oldIndex, newIndex);
     setTasks(newTasks);
 
-    // Update Firestore with new order
     newTasks.forEach(async (task, index) => {
       const taskRef = doc(db, "tasks", task.id);
       await updateDoc(taskRef, { order: index });
@@ -83,15 +85,14 @@ function App() {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        delay: 200, // Increase delay to 200ms
-        tolerance: 10, // Increase tolerance to 10px
+        delay: 200,
+        tolerance: 10,
       },
     }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  // Open task details modal
-  const openModal = (task: any) => {
+  const openModal = (task: Task) => {
     console.log('Opening modal for task:', task);
     setSelectedTask(task);
   };
@@ -99,7 +100,6 @@ function App() {
     setSelectedTask(null);
   };
 
-  // Toggle theme
   const toggleTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
@@ -142,7 +142,6 @@ function App() {
       </div>
       <div className="section">
         <h2>Task List</h2>
-        {/* Draggable Task List (Trello-like columns, grouped by category) */}
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {categories.map((cat) => (
@@ -159,7 +158,7 @@ function App() {
                     .map((task) => (
                       <SortableItem
                         key={task.id}
-                        id={task.id} // Pass `id` explicitly for SortableContext
+                        id={task.id}
                         task={task}
                         toggleTask={toggleTask}
                         deleteTask={deleteTask}
